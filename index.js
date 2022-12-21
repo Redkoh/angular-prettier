@@ -34091,6 +34091,11 @@ var require_utils11 = __commonJS2({
       return getNodeCssStyleWhiteSpace(node).startsWith("pre");
     }
     function isLeadingSpaceSensitiveNode(node, options) {
+      var _node$parent;
+      const isI18n = ((_node$parent = node.parent) === null || _node$parent === void 0 ? void 0 : _node$parent.attrs) && node.patent.attrs.some((a) => a.name === "i18n");
+      if (isI18n) {
+        return true;
+      }
       const isLeadingSpaceSensitive = _isLeadingSpaceSensitiveNode();
       if (isLeadingSpaceSensitive && !node.prev && node.parent && node.parent.tagDefinition && node.parent.tagDefinition.ignoreFirstLf) {
         return node.type === "interpolation";
@@ -34119,8 +34124,13 @@ var require_utils11 = __commonJS2({
       }
     }
     function isTrailingSpaceSensitiveNode(node, options) {
+      var _node$parent2;
       if (isFrontMatterNode(node)) {
         return false;
+      }
+      const isI18n = ((_node$parent2 = node.parent) === null || _node$parent2 === void 0 ? void 0 : _node$parent2.attrs) && node.patent.attrs.some((a) => a.name === "i18n");
+      if (isI18n) {
+        return true;
       }
       if ((node.type === "text" || node.type === "interpolation") && node.next && (node.next.type === "text" || node.next.type === "interpolation")) {
         return true;
@@ -35519,6 +35529,7 @@ var require_print_preprocess3 = __commonJS2({
         }
         const isWhitespaceSensitive = isWhitespaceSensitiveNode(node);
         const isIndentationSensitive = isIndentationSensitiveNode(node);
+        const isI18n = node.attrs && node.attrs.some((a) => a.name === "i18n");
         if (!isWhitespaceSensitive) {
           for (let i = 0; i < node.children.length; i++) {
             const child = node.children[i];
@@ -35548,14 +35559,14 @@ var require_print_preprocess3 = __commonJS2({
               child.sourceSpan = new ParseSourceSpan(child.sourceSpan.start.moveBy(leadingWhitespace.length), child.sourceSpan.end.moveBy(-trailingWhitespace.length));
               if (leadingWhitespace) {
                 if (prevChild) {
-                  prevChild.hasTrailingSpaces = true;
+                  prevChild.hasTrailingSpaces = !isI18n;
                 }
-                child.hasLeadingSpaces = true;
+                child.hasLeadingSpaces = !isI18n;
               }
               if (trailingWhitespace) {
-                child.hasTrailingSpaces = true;
+                child.hasTrailingSpaces = !isI18n;
                 if (nextChild) {
-                  nextChild.hasLeadingSpaces = true;
+                  nextChild.hasLeadingSpaces = !isI18n;
                 }
               }
             }
@@ -35745,8 +35756,8 @@ var require_tag = __commonJS2({
       return node.lastChild && node.lastChild.isTrailingSpaceSensitive && !node.lastChild.hasTrailingSpaces && !isTextLikeNode(getLastDescendant(node.lastChild)) && !isPreLikeNode(node);
     }
     function needsToBorrowParentClosingTagStartMarker(node) {
-      var _node$parent;
-      const i18nContent = ((_node$parent = node.parent) === null || _node$parent === void 0 ? void 0 : _node$parent.attrs) && node.parent.attrs.some((a) => a.name === "i18n");
+      var _node$parent3;
+      const i18nContent = ((_node$parent3 = node.parent) === null || _node$parent3 === void 0 ? void 0 : _node$parent3.attrs) && node.parent.attrs.some((a) => a.name === "i18n");
       return !node.next && (!node.hasTrailingSpaces && node.isTrailingSpaceSensitive || i18nContent) && isTextLikeNode(getLastDescendant(node));
     }
     function needsToBorrowNextOpeningTagStartMarker(node) {
@@ -35763,8 +35774,8 @@ var require_tag = __commonJS2({
       return match[1].split(/\s+/);
     }
     function needsToBorrowParentOpeningTagEndMarker(node) {
-      var _node$parent2;
-      const i18nContent = ((_node$parent2 = node.parent) === null || _node$parent2 === void 0 ? void 0 : _node$parent2.attrs) && node.parent.attrs.some((a) => a.name === "i18n");
+      var _node$parent4;
+      const i18nContent = ((_node$parent4 = node.parent) === null || _node$parent4 === void 0 ? void 0 : _node$parent4.attrs) && node.parent.attrs.some((a) => a.name === "i18n");
       return !node.prev && (node.isLeadingSpaceSensitive && !node.hasLeadingSpaces || i18nContent);
     }
     function printAttributes(path, options, print) {
