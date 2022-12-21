@@ -36588,7 +36588,7 @@ var require_element = __commonJS2({
         return [printOpeningTagPrefix(node, options), group(printOpeningTag(path, options, print)), ...replaceTextEndOfLine(getNodeContent(node, options)), ...printClosingTag(node, options), printClosingTagSuffix(node, options)];
       }
       const shouldHugContent = node.children.length === 1 && node.firstChild.type === "interpolation" && node.firstChild.isLeadingSpaceSensitive && !node.firstChild.hasLeadingSpaces && node.lastChild.isTrailingSpaceSensitive && !node.lastChild.hasTrailingSpaces;
-      const shouldHugI18nContent = Boolean(node.i18n);
+      const i18nContent = Boolean(node.i18n);
       const attrGroupId = Symbol("element-attr-group-id");
       const printTag = (doc2) => group([group(printOpeningTag(path, options, print), {
         id: attrGroupId
@@ -36610,15 +36610,10 @@ var require_element = __commonJS2({
             groupId: attrGroupId
           });
         }
-        if (shouldHugI18nContent) {
-          return ifBreak(softline, "", {
-            groupId: attrGroupId
-          });
-        }
-        if (node.firstChild.hasLeadingSpaces && node.firstChild.isLeadingSpaceSensitive) {
+        if (node.firstChild.hasLeadingSpaces && node.firstChild.isLeadingSpaceSensitive && !i18nContent) {
           return line;
         }
-        if (node.firstChild.type === "text" && node.isWhitespaceSensitive && node.isIndentationSensitive) {
+        if (node.firstChild.type === "text" && node.isWhitespaceSensitive && node.isIndentationSensitive && !i18nContent) {
           return dedentToRoot(softline);
         }
         return softline;
@@ -36631,12 +36626,12 @@ var require_element = __commonJS2({
           }
           return "";
         }
-        if (shouldHugContent || shouldHugI18nContent) {
+        if (shouldHugContent) {
           return ifBreak(softline, "", {
             groupId: attrGroupId
           });
         }
-        if (node.lastChild.hasTrailingSpaces && node.lastChild.isTrailingSpaceSensitive) {
+        if (node.lastChild.hasTrailingSpaces && node.lastChild.isTrailingSpaceSensitive && !i18nContent) {
           return line;
         }
         if ((node.lastChild.type === "comment" || node.lastChild.type === "text" && node.isWhitespaceSensitive && node.isIndentationSensitive) && new RegExp(`\\n[\\t ]{${options.tabWidth * countParents(path, (node2) => node2.parent && node2.parent.type !== "root")}}$`).test(node.lastChild.value)) {
