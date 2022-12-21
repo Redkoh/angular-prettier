@@ -34304,6 +34304,10 @@ var require_utils11 = __commonJS2({
           return node.name === "svg" ? "inline-block" : "block";
         }
       }
+      const isI18n = node.attrs && node.attrs.some((a) => a.name === "i18n");
+      if (isI18n) {
+        return "inline";
+      }
       switch (options.htmlWhitespaceSensitivity) {
         case "strict":
           return "inline";
