@@ -35761,7 +35761,8 @@ var require_tag = __commonJS2({
       return match[1].split(/\s+/);
     }
     function needsToBorrowParentOpeningTagEndMarker(node) {
-      const i18nContent = node.parent && node.parent.attrs.some((a) => a.name === "i18n");
+      var _node$parent;
+      const i18nContent = ((_node$parent = node.parent) === null || _node$parent === void 0 ? void 0 : _node$parent.attrs) && node.parent.attrs.some((a) => a.name === "i18n");
       return !node.prev && (node.isLeadingSpaceSensitive && !node.hasLeadingSpaces || i18nContent);
     }
     function printAttributes(path, options, print) {
