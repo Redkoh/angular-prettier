@@ -34092,7 +34092,7 @@ var require_utils11 = __commonJS2({
     }
     function isLeadingSpaceSensitiveNode(node, options) {
       var _node$parent;
-      const isI18n = ((_node$parent = node.parent) === null || _node$parent === void 0 ? void 0 : _node$parent.attrs) && node.patent.attrs.some((a) => a.name === "i18n");
+      const isI18n = ((_node$parent = node.parent) === null || _node$parent === void 0 ? void 0 : _node$parent.attrs) && node.parent.attrs.some((a) => a.name === "i18n");
       if (isI18n) {
         return true;
       }
@@ -34128,7 +34128,7 @@ var require_utils11 = __commonJS2({
       if (isFrontMatterNode(node)) {
         return false;
       }
-      const isI18n = ((_node$parent2 = node.parent) === null || _node$parent2 === void 0 ? void 0 : _node$parent2.attrs) && node.patent.attrs.some((a) => a.name === "i18n");
+      const isI18n = ((_node$parent2 = node.parent) === null || _node$parent2 === void 0 ? void 0 : _node$parent2.attrs) && node.parent.attrs.some((a) => a.name === "i18n");
       if (isI18n) {
         return true;
       }
