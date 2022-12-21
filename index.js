@@ -36592,6 +36592,7 @@ var require_element = __commonJS2({
         return [printOpeningTagPrefix(node, options), group(printOpeningTag(path, options, print)), ...replaceTextEndOfLine(getNodeContent(node, options)), ...printClosingTag(node, options), printClosingTagSuffix(node, options)];
       }
       const shouldHugContent = node.children.length === 1 && node.firstChild.type === "interpolation" && node.firstChild.isLeadingSpaceSensitive && !node.firstChild.hasLeadingSpaces && node.lastChild.isTrailingSpaceSensitive && !node.lastChild.hasTrailingSpaces;
+      const i18nContent = node.attrs.some((a) => a.name === "i18n");
       const attrGroupId = Symbol("element-attr-group-id");
       const printTag = (doc2) => group([group(printOpeningTag(path, options, print), {
         id: attrGroupId
@@ -36614,6 +36615,9 @@ var require_element = __commonJS2({
           });
         }
         if (node.firstChild.hasLeadingSpaces && node.firstChild.isLeadingSpaceSensitive) {
+          if (i18nContent) {
+            return "";
+          }
           return line;
         }
         if (node.firstChild.type === "text" && node.isWhitespaceSensitive && node.isIndentationSensitive) {
@@ -36635,6 +36639,9 @@ var require_element = __commonJS2({
           });
         }
         if (node.lastChild.hasTrailingSpaces && node.lastChild.isTrailingSpaceSensitive) {
+          if (i18nContent) {
+            return "";
+          }
           return line;
         }
         if ((node.lastChild.type === "comment" || node.lastChild.type === "text" && node.isWhitespaceSensitive && node.isIndentationSensitive) && new RegExp(`\\n[\\t ]{${options.tabWidth * countParents(path, (node2) => node2.parent && node2.parent.type !== "root")}}$`).test(node.lastChild.value)) {
