@@ -36607,7 +36607,6 @@ var require_element = __commonJS2({
         return [printOpeningTagPrefix(node, options), group(printOpeningTag(path, options, print)), ...replaceTextEndOfLine(getNodeContent(node, options)), ...printClosingTag(node, options), printClosingTagSuffix(node, options)];
       }
       const shouldHugContent = node.children.length === 1 && node.firstChild.type === "interpolation" && node.firstChild.isLeadingSpaceSensitive && !node.firstChild.hasLeadingSpaces && node.lastChild.isTrailingSpaceSensitive && !node.lastChild.hasTrailingSpaces;
-      const i18nContent = node.attrs.some((a) => a.name === "i18n");
       const attrGroupId = Symbol("element-attr-group-id");
       const printTag = (doc2) => group([group(printOpeningTag(path, options, print), {
         id: attrGroupId
@@ -36629,9 +36628,6 @@ var require_element = __commonJS2({
             groupId: attrGroupId
           });
         }
-        if (i18nContent) {
-          return "";
-        }
         if (node.firstChild.hasLeadingSpaces && node.firstChild.isLeadingSpaceSensitive) {
           return line;
         }
@@ -36652,9 +36648,6 @@ var require_element = __commonJS2({
           return ifBreak(softline, "", {
             groupId: attrGroupId
           });
-        }
-        if (i18nContent) {
-          return "";
         }
         if (node.lastChild.hasTrailingSpaces && node.lastChild.isTrailingSpaceSensitive) {
           return line;
