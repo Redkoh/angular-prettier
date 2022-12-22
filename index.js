@@ -35762,7 +35762,9 @@ var require_tag = __commonJS2({
       return node.lastChild && node.lastChild.isTrailingSpaceSensitive && !node.lastChild.hasTrailingSpaces && !isTextLikeNode(getLastDescendant(node.lastChild)) && !isPreLikeNode(node);
     }
     function needsToBorrowParentClosingTagStartMarker(node) {
-      return !node.next && !node.hasTrailingSpaces && node.isTrailingSpaceSensitive && isTextLikeNode(getLastDescendant(node));
+      var _node$parent4;
+      const i18nContent = ((_node$parent4 = node.parent) === null || _node$parent4 === void 0 ? void 0 : _node$parent4.attrs) && node.parent.attrs.some((a) => a.name === "i18n");
+      return !node.next && (!node.hasTrailingSpaces && node.isTrailingSpaceSensitive || i18nContent) && isTextLikeNode(getLastDescendant(node));
     }
     function needsToBorrowNextOpeningTagStartMarker(node) {
       return node.next && !isTextLikeNode(node.next) && isTextLikeNode(node) && node.isTrailingSpaceSensitive && !node.hasTrailingSpaces;
@@ -35778,7 +35780,9 @@ var require_tag = __commonJS2({
       return match[1].split(/\s+/);
     }
     function needsToBorrowParentOpeningTagEndMarker(node) {
-      return !node.prev && node.isLeadingSpaceSensitive && !node.hasLeadingSpaces;
+      var _node$parent5;
+      const i18nContent = ((_node$parent5 = node.parent) === null || _node$parent5 === void 0 ? void 0 : _node$parent5.attrs) && node.parent.attrs.some((a) => a.name === "i18n");
+      return !node.prev && (node.isLeadingSpaceSensitive && !node.hasLeadingSpaces || i18nContent);
     }
     function printAttributes(path, options, print) {
       const node = path.getValue();
